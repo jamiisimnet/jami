@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Pesa Agent Registration System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>M-Pesa Agent System | Complete Management Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -12,104 +16,427 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Login Page */
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-fadeLeft {
+            animation: fadeInLeft 0.6s ease forwards;
+        }
+
+        .animate-fadeRight {
+            animation: fadeInRight 0.6s ease forwards;
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.5s ease forwards;
+        }
+
+        /* ==================== LOADER ==================== */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .page-loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        /* ==================== LOGIN PAGE ==================== */
         .login-container {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 480px;
+            animation: fadeInUp 0.8s ease;
         }
 
         .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            width: 400px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
         }
 
-        .login-box h2 {
-            margin-bottom: 30px;
-            color: #333;
+        .login-header {
+            padding: 48px 48px 32px 48px;
             text-align: center;
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .login-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .login-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .login-form {
+            padding: 40px 48px 48px 48px;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 28px;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #666;
-            font-weight: 500;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+        .input-group label i {
+            margin-right: 8px;
+            color: #667eea;
+            font-size: 14px;
         }
 
-        button {
+        .input-group input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 18px;
+            border: 2px solid #e8e8e8;
+            border-radius: 16px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #bbb;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 16px;
             font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        button:hover {
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .login-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .login-button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
-        /* Dashboard Layout */
-        .dashboard {
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
             display: none;
         }
 
-        .app-container {
-            display: flex;
+        .login-button.loading .button-text {
+            display: none;
+        }
+
+        .login-button.loading .button-spinner {
+            display: block;
+        }
+
+        .login-footer {
+            margin-top: 32px;
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .login-footer p {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .login-footer i {
+            color: #667eea;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: fadeInUp 0.3s ease;
+            border-left: 4px solid #dc3545;
+            font-size: 14px;
+        }
+
+        .error-message i {
+            font-size: 18px;
+        }
+
+        /* ==================== DASHBOARD LAYOUT ==================== */
+        .dashboard {
+            display: none;
+            background: #f0f2f8;
             min-height: 100vh;
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle i {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .fab {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            z-index: 999;
+            font-size: 24px;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
         }
 
         /* Sidebar */
         .sidebar {
             width: 280px;
-            background: linear-gradient(180deg, #2c3e50 0%, #1a1a2e 100%);
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
             color: white;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar-header {
-            padding: 25px 20px;
+            padding: 30px 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-header h3 {
-            font-size: 20px;
+            font-size: 22px;
+            font-weight: 700;
             margin-bottom: 5px;
         }
 
         .sidebar-header p {
             font-size: 12px;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .sidebar-nav {
@@ -117,32 +444,34 @@
         }
 
         .nav-item {
-            padding: 12px 25px;
+            padding: 14px 22px;
             margin: 5px 15px;
-            border-radius: 10px;
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .nav-item:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.08);
             transform: translateX(5px);
         }
 
         .nav-item.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .nav-icon {
             font-size: 20px;
-            width: 30px;
+            width: 28px;
+            text-align: center;
         }
 
         .nav-label {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
         }
 
@@ -152,113 +481,218 @@
             left: 0;
             right: 0;
             padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .user-name {
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 5px;
+            font-size: 15px;
         }
 
         .user-role {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-bottom: 10px;
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 12px;
         }
 
         .logout-sidebar {
-            background: #dc3545;
-            padding: 8px;
+            background: rgba(220, 53, 69, 0.8);
+            padding: 10px;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 600;
         }
 
         .logout-sidebar:hover {
-            background: #c82333;
+            background: #dc3545;
+            transform: translateY(-2px);
         }
 
         /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 280px;
-            padding: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .welcome-banner h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .welcome-stat {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 16px;
+            min-width: 150px;
         }
 
         /* Stats Cards */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
 
         .stat-card {
             background: white;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
         .stat-card h3 {
             color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
 
         .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 38px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .stat-icon {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 48px;
+            opacity: 0.12;
+        }
+
+        .commission-card .stat-number {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Pages */
         .page {
             display: none;
-            animation: fadeIn 0.5s;
         }
 
         .page.active {
             display: block;
+            animation: fadeInUp 0.5s ease;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Sections within pages */
         .section {
             background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            padding: 28px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
         }
 
         .section h3 {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             color: #333;
             font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* Buttons */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .approve-btn {
+            width: auto;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            font-size: 12px;
         }
 
         /* Tables */
@@ -272,209 +706,242 @@
         }
 
         th, td {
-            padding: 12px;
+            padding: 14px 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         th {
-            background: #f5f5f5;
-            font-weight: 600;
-            color: #333;
+            background: #f8f9fc;
+            font-weight: 700;
+            color: #444;
         }
 
         tr:hover {
-            background: #f9f9f9;
+            background: #f8f9fc;
         }
 
         .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
             display: inline-block;
         }
 
         .status-pending {
-            background: #ffc107;
-            color: #333;
+            background: #fff3cd;
+            color: #856404;
         }
 
         .status-approved {
-            background: #28a745;
-            color: white;
-        }
-
-        .approve-btn {
-            width: auto;
-            padding: 5px 15px;
-            background: #28a745;
-            font-size: 12px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
-            position: relative;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        /* Messages */
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .success-message {
             background: #d4edda;
             color: #155724;
-            padding: 10px;
-            border-radius: 5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 24px;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            opacity: 0.3;
             margin-bottom: 20px;
-            display: none;
+        }
+
+        /* Toast */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: fadeInRight 0.3s ease;
+            border-left: 4px solid #28a745;
         }
 
         .connection-status {
             position: fixed;
-            bottom: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            border-radius: 5px;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 40px;
             font-size: 11px;
+            font-weight: 600;
             z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
         .connection-online {
-            background: #28a745;
+            background: rgba(40, 167, 69, 0.95);
             color: white;
         }
 
         .connection-offline {
-            background: #dc3545;
+            background: rgba(220, 53, 69, 0.95);
             color: white;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 80px;
-            }
-            .sidebar-header h3, .sidebar-header p, .nav-label, .user-info-sidebar .user-name, .user-info-sidebar .user-role {
-                display: none;
-            }
-            .main-content {
-                margin-left: 80px;
-            }
-            .nav-item {
+            .menu-toggle, .fab {
+                display: flex;
+                align-items: center;
                 justify-content: center;
-                padding: 12px;
             }
-            .nav-icon {
-                margin: 0;
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 85%;
+                max-width: 300px;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+                animation: slideIn 0.3s ease;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 70px 15px 20px 15px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-banner {
+                padding: 20px;
+            }
+            
+            .welcome-banner h2 {
+                font-size: 22px;
+            }
+            
+            .login-header {
+                padding: 36px 32px 24px 32px;
+            }
+            
+            .login-form {
+                padding: 32px 32px 40px 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-header {
+                padding: 28px 24px 20px 24px;
+            }
+            
+            .login-form {
+                padding: 28px 24px 32px 24px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Page Loader -->
+    <div id="pageLoader" class="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Loading System...</div>
+        </div>
+    </div>
+
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
-        <div class="login-box">
-            <h2>M-Pesa Agent System</h2>
-            <div id="loginError" class="error-message"></div>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" required placeholder="admin@example.com">
+        <div class="login-wrapper">
+            <div class="login-box">
+                <div class="login-header">
+                    <div class="login-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h2>M-Pesa Agent System</h2>
+                    <p>Secure Registration & Management Platform</p>
                 </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" required placeholder="admin123">
+                
+                <div class="login-form">
+                    <div id="loginError" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span></span>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="loginEmail" required placeholder="Enter your registered email">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="loginPassword" required placeholder="Enter your password">
+                        </div>
+                        
+                        <button type="submit" class="login-button" id="loginBtn">
+                            <span class="button-text">Login to Dashboard</span>
+                            <span class="button-spinner"></span>
+                            <i class="fas fa-arrow-right button-icon"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p><i class="fas fa-shield-alt"></i> Secure Agent Portal • Authorized Access Only</p>
+                    </div>
                 </div>
-                <button type="submit">Login</button>
-            </form>
-            <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; font-size: 12px;">
-                <strong>Default Login:</strong><br>
-                Email: admin@example.com<br>
-                Password: admin123
             </div>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <button class="fab" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
         <div class="app-container">
             <!-- Sidebar -->
-            <div class="sidebar">
+            <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <h3>M-Pesa Agent System</h3>
-                    <p>Registration Platform</p>
+                    <h3>💳 M-Pesa System</h3>
+                    <p>Agent Dashboard</p>
                 </div>
                 <div class="sidebar-nav">
                     <div class="nav-item active" data-page="dashboard">
-                        <div class="nav-icon">📊</div>
+                        <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
                         <div class="nav-label">Dashboard</div>
                     </div>
                     <div class="nav-item" data-page="register">
-                        <div class="nav-icon">📝</div>
+                        <div class="nav-icon"><i class="fas fa-user-plus"></i></div>
                         <div class="nav-label">New Registration</div>
                     </div>
-                    <div id="adminNavItems" style="display: none;">
-                        <div class="nav-item" data-page="registrations">
-                            <div class="nav-icon">📋</div>
+                    <div id="adminMenu" style="display: none;">
+                        <div class="nav-item" data-page="allRegistrations">
+                            <div class="nav-icon"><i class="fas fa-list"></i></div>
                             <div class="nav-label">All Registrations</div>
                         </div>
-                        <div class="nav-item" data-page="agents">
-                            <div class="nav-icon">👥</div>
+                        <div class="nav-item" data-page="allAgents">
+                            <div class="nav-icon"><i class="fas fa-users"></i></div>
                             <div class="nav-label">Manage Agents</div>
                         </div>
                         <div class="nav-item" data-page="createAgent">
-                            <div class="nav-icon">➕</div>
+                            <div class="nav-icon"><i class="fas fa-user-plus"></i></div>
                             <div class="nav-label">Create Agent</div>
                         </div>
                     </div>
-                    <div id="agentNavItems" style="display: none;">
+                    <div id="agentMenu" style="display: none;">
                         <div class="nav-item" data-page="myRegistrations">
-                            <div class="nav-icon">📋</div>
+                            <div class="nav-icon"><i class="fas fa-folder-open"></i></div>
                             <div class="nav-label">My Registrations</div>
                         </div>
                     </div>
@@ -482,7 +949,9 @@
                 <div class="user-info-sidebar">
                     <div class="user-name" id="sidebarUserName"></div>
                     <div class="user-role" id="sidebarUserRole"></div>
-                    <div class="logout-sidebar" onclick="logout()">Logout</div>
+                    <div class="logout-sidebar" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </div>
                 </div>
             </div>
 
@@ -490,86 +959,121 @@
             <div class="main-content">
                 <!-- Dashboard Page -->
                 <div id="dashboardPage" class="page active">
-                    <div class="stats-container">
-                        <div class="stat-card">
-                            <h3>Total Registrations</h3>
-                            <div class="stat-number" id="totalReg">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Approved</h3>
-                            <div class="stat-number" id="approvedReg">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Pending</h3>
-                            <div class="stat-number" id="pendingReg">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Total Commission (KES)</h3>
-                            <div class="stat-number" id="totalComm">0</div>
+                    <div class="welcome-banner animate-fadeUp">
+                        <h2>Welcome back, <span id="welcomeName"></span>! 👋</h2>
+                        <p>Here's your personal performance summary</p>
+                        <div class="welcome-stats">
+                            <div class="welcome-stat">
+                                <div class="welcome-stat-label">Performance Rating</div>
+                                <div class="welcome-stat-value" id="performanceRating">★ 0.0</div>
+                            </div>
+                            <div class="welcome-stat">
+                                <div class="welcome-stat-label">Agent Rank</div>
+                                <div class="welcome-stat-value" id="agentRank">#0</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="section">
-                        <h3>Quick Actions</h3>
-                        <div class="form-grid">
-                            <button onclick="changePage('register')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">➕ New Registration</button>
-                            <button onclick="changePage('myRegistrations')" id="quickMyRegBtn" style="display: none;">📋 My Registrations</button>
-                            <button onclick="changePage('registrations')" id="quickAllRegBtn" style="display: none;">📋 All Registrations</button>
+
+                    <div class="stats-container">
+                        <div class="stat-card animate-fadeLeft">
+                            <i class="fas fa-file-alt stat-icon"></i>
+                            <h3>My Total Registrations</h3>
+                            <div class="stat-number" id="myTotalReg">0</div>
                         </div>
+                        <div class="stat-card animate-fadeLeft">
+                            <i class="fas fa-check-circle stat-icon"></i>
+                            <h3>Approved</h3>
+                            <div class="stat-number" id="myApprovedReg">0</div>
+                        </div>
+                        <div class="stat-card animate-fadeLeft">
+                            <i class="fas fa-clock stat-icon"></i>
+                            <h3>Pending</h3>
+                            <div class="stat-number" id="myPendingReg">0</div>
+                        </div>
+                        <div class="stat-card commission-card animate-fadeLeft">
+                            <i class="fas fa-coins stat-icon"></i>
+                            <h3>My Commission (KES)</h3>
+                            <div class="stat-number" id="myCommission">KES 0</div>
+                        </div>
+                    </div>
+
+                    <div class="section animate-fadeUp">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        <div class="form-grid">
+                            <button onclick="changePage('register')">
+                                <i class="fas fa-plus"></i> New Registration
+                            </button>
+                            <button onclick="changePage('myRegistrations')" id="quickMyRegBtn">
+                                <i class="fas fa-folder-open"></i> My Registrations
+                            </button>
+                            <button onclick="changePage('allRegistrations')" id="quickAllRegBtn" style="display: none;">
+                                <i class="fas fa-list"></i> All Registrations
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="emptyState" class="empty-state animate-scale" style="display: none;">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-chart-simple"></i>
+                        </div>
+                        <h3>No Registrations Yet</h3>
+                        <p>Start by registering your first M-Pesa customer. Each registration earns you KES 50 commission upon approval.</p>
+                        <button onclick="changePage('register')" style="width: auto; padding: 12px 30px;">
+                            <i class="fas fa-plus"></i> Register Your First Customer
+                        </button>
                     </div>
                 </div>
 
                 <!-- New Registration Page -->
                 <div id="registerPage" class="page">
                     <div class="section">
-                        <h3>New M-Pesa Registration</h3>
+                        <h3><i class="fas fa-user-plus"></i> New M-Pesa Registration</h3>
                         <div id="regSuccess" class="success-message"></div>
                         <div id="regError" class="error-message"></div>
                         <form id="registrationForm">
                             <div class="form-grid">
                                 <div class="input-group">
-                                    <label>Full Name</label>
-                                    <input type="text" id="regName" required>
+                                    <label><i class="fas fa-user"></i> Customer Full Name</label>
+                                    <input type="text" id="regName" required placeholder="Enter customer name">
                                 </div>
                                 <div class="input-group">
-                                    <label>ID Number</label>
-                                    <input type="text" id="regIdNumber" required>
+                                    <label><i class="fas fa-id-card"></i> ID Number</label>
+                                    <input type="text" id="regIdNumber" required placeholder="ID number">
                                 </div>
                                 <div class="input-group">
-                                    <label>Date of Birth</label>
+                                    <label><i class="fas fa-calendar"></i> Date of Birth</label>
                                     <input type="date" id="regDob" required>
                                 </div>
                                 <div class="input-group">
-                                    <label>Phone Number</label>
-                                    <input type="tel" id="regPhone" required>
+                                    <label><i class="fas fa-phone"></i> Phone Number</label>
+                                    <input type="tel" id="regPhone" required placeholder="07XXXXXXXX">
                                 </div>
                             </div>
-                            <button type="submit">Submit Registration</button>
+                            <button type="submit"><i class="fas fa-check"></i> Submit Registration</button>
                         </form>
                     </div>
                 </div>
 
                 <!-- All Registrations Page (Admin) -->
-                <div id="registrationsPage" class="page">
+                <div id="allRegistrationsPage" class="page">
                     <div class="section">
-                        <h3>All Registrations</h3>
+                        <h3><i class="fas fa-list"></i> All Registrations</h3>
                         <div class="table-container">
-                            <table id="registrationsTable">
-                                <thead>
-                                    <tr><th>ID</th><th>Name</th><th>ID Number</th><th>Phone</th><th>Agent</th><th>Status</th><th>Action</th></tr>
-                                </thead>
+                            <table id="allRegistrationsTable">
+                                <thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Commission</th><th>Action</th></tr></thead>
                                 <tbody></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Manage Agents Page (Admin) -->
-                <div id="agentsPage" class="page">
+                <!-- All Agents Page (Admin) -->
+                <div id="allAgentsPage" class="page">
                     <div class="section">
-                        <h3>All Agents</h3>
+                        <h3><i class="fas fa-users"></i> All Agents</h3>
                         <div class="table-container">
                             <table id="agentsTable">
-                                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Location</th><th>Status</th></tr></thead>
+                                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Location</th><th>Registrations</th><th>Commission</th></tr></thead>
                                 <tbody></tbody>
                             </table>
                         </div>
@@ -579,16 +1083,16 @@
                 <!-- Create Agent Page (Admin) -->
                 <div id="createAgentPage" class="page">
                     <div class="section">
-                        <h3>Create New Agent</h3>
+                        <h3><i class="fas fa-user-plus"></i> Create New Agent</h3>
                         <div id="agentSuccess" class="success-message"></div>
                         <div id="agentError" class="error-message"></div>
                         <form id="createAgentForm">
                             <div class="form-grid">
-                                <div class="input-group"><label>Full Name</label><input type="text" id="agentName" required></div>
-                                <div class="input-group"><label>Email</label><input type="email" id="agentEmail" required></div>
-                                <div class="input-group"><label>Phone Number</label><input type="tel" id="agentPhone" required></div>
-                                <div class="input-group"><label>ID Number</label><input type="text" id="agentIdNumber" required></div>
-                                <div class="input-group"><label>Location</label><input type="text" id="agentLocation" required></div>
+                                <input type="text" id="agentName" placeholder="Full Name" required>
+                                <input type="email" id="agentEmail" placeholder="Email" required>
+                                <input type="tel" id="agentPhone" placeholder="Phone" required>
+                                <input type="text" id="agentIdNumber" placeholder="ID Number" required>
+                                <input type="text" id="agentLocation" placeholder="Location" required>
                             </div>
                             <button type="submit">Create Agent</button>
                         </form>
@@ -598,11 +1102,11 @@
                 <!-- My Registrations Page (Agent) -->
                 <div id="myRegistrationsPage" class="page">
                     <div class="section">
-                        <h3>My Registrations</h3>
+                        <h3><i class="fas fa-folder-open"></i> My Registrations</h3>
                         <div class="table-container">
                             <table id="agentRegistrationsTable">
-                                <thead><tr><th>ID</th><th>Name</th><th>ID Number</th><th>Phone</th><th>Status</th><th>Commission</th></tr></thead>
-                                <tbody></tbody>
+                                <thead><tr><th>ID</th><th>Customer</th><th>ID Number</th><th>Phone</th><th>Status</th><th>Commission</th><th>Date</th></tr></thead>
+                                <tbody id="agentRegistrationsBody"></tbody>
                             </table>
                         </div>
                     </div>
@@ -612,250 +1116,317 @@
     </div>
 
     <!-- Connection Status -->
-    <div id="connectionStatus" class="connection-status connection-offline">🔴 Connecting...</div>
-
-    <!-- Promotion Modal -->
-    <div id="promoModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closePromoModal()">&times;</span>
-            <h3 class="promo-title" id="promoTitle">🎉 Special Promotion!</h3>
-            <div class="promo-message" id="promoMessage"></div>
-            <button class="continue-btn" onclick="closePromoModal()">Continue to Dashboard</button>
-        </div>
+    <div id="connectionStatus" class="connection-status connection-offline">
+        <i class="fas fa-circle"></i> Initializing...
     </div>
+
+    <style>
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #28a745;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #dc3545;
+        }
+        #agentRegistrationsBody td {
+            padding: 12px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 14px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+    </style>
 
     <script>
         // ==================== CONFIGURATION ====================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNX2wbj7VRB7bY6sa_037LZQ4GF9f_EwSZIOMu6_Rk2-F56W8JVJ3NwT8ugrrrvUKuKA/exec';
         
         let currentUser = null;
-        
-        // ==================== API CALL FUNCTION ====================
+        let allRegistrations = [];
+
+        // Hide loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('pageLoader');
+                loader.classList.add('fade-out');
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 800);
+        });
+
+        // API Call
         async function callAPI(action, params = {}) {
             const formData = new FormData();
             formData.append('action', action);
-            
-            Object.keys(params).forEach(key => {
-                formData.append(key, params[key]);
-            });
+            Object.keys(params).forEach(key => formData.append(key, params[key]));
             
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'cors'
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'cors' });
                 const text = await response.text();
-                console.log(`Response from ${action}:`, text.substring(0, 200));
-                
                 try {
-                    const data = JSON.parse(text);
-                    return data;
+                    return JSON.parse(text);
                 } catch (e) {
-                    console.error('Failed to parse JSON:', text);
-                    return { success: false, error: 'Invalid response from server' };
+                    return { success: false, error: 'Invalid response' };
                 }
             } catch (error) {
-                console.error('API Error:', error);
                 return { success: false, error: error.message };
             }
         }
-        
-        // ==================== PAGE NAVIGATION ====================
-        function changePage(pageName) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            const targetPage = document.getElementById(`${pageName}Page`);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-page') === pageName) {
-                    item.classList.add('active');
-                }
-            });
-            
-            // Refresh data when switching pages
-            if (pageName === 'registrations') {
-                loadAllRegistrations();
-            } else if (pageName === 'agents') {
-                loadAllAgents();
-            } else if (pageName === 'myRegistrations') {
-                loadAgentRegistrations();
-            } else if (pageName === 'dashboard') {
-                loadStats();
-            }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.style.borderLeftColor = type === 'success' ? '#28a745' : '#dc3545';
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="color: ${type === 'success' ? '#28a745' : '#dc3545'}"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
-        
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function changePage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`${pageName}Page`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            if (pageName === 'allRegistrations') loadAllRegistrations();
+            if (pageName === 'allAgents') loadAllAgents();
+            if (pageName === 'myRegistrations') loadAgentRegistrations();
+            if (pageName === 'dashboard') loadAgentDashboard();
+            
+            if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+        }
+
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function() {
-                const pageName = this.getAttribute('data-page');
-                if (pageName) {
-                    changePage(pageName);
-                }
+                changePage(this.getAttribute('data-page'));
             });
         });
-        
-        // ==================== DASHBOARD FUNCTIONS ====================
-        async function loadStats() {
-            const result = await callAPI('getStats');
+
+        function animateNumber(elementId, target, isCurrency = false) {
+            let current = 0;
+            let element = document.getElementById(elementId);
+            let increment = target / 50;
+            let timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = isCurrency ? `KES ${target.toLocaleString()}` : Math.floor(target);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = isCurrency ? `KES ${Math.floor(current).toLocaleString()}` : Math.floor(current);
+                }
+            }, 20);
+        }
+
+        async function loadAgentDashboard() {
+            if (!currentUser) return;
             
-            if (result && !result.error) {
-                document.getElementById('totalReg').textContent = result.total || 0;
-                document.getElementById('approvedReg').textContent = result.approved || 0;
-                document.getElementById('pendingReg').textContent = result.pending || 0;
-                document.getElementById('totalComm').textContent = (result.totalCommission || 0).toLocaleString();
+            const result = await callAPI('getRegistrations');
+            if (Array.isArray(result)) {
+                allRegistrations = result;
+                const myRegs = result.filter(r => r.agentId === currentUser.id);
+                const myApproved = myRegs.filter(r => r.status === 'approved');
+                const myPending = myRegs.filter(r => r.status === 'pending');
+                const myCommission = myApproved.reduce((sum, r) => sum + (r.commission || 0), 0);
+                
+                animateNumber('myTotalReg', myRegs.length);
+                animateNumber('myApprovedReg', myApproved.length);
+                animateNumber('myPendingReg', myPending.length);
+                animateNumber('myCommission', myCommission, true);
+                
+                const rating = myApproved.length > 0 ? Math.min(5, (myApproved.length / 10) * 5) : 0;
+                document.getElementById('performanceRating').innerHTML = `★ ${rating.toFixed(1)} / 5.0`;
+                
+                const emptyState = document.getElementById('emptyState');
+                emptyState.style.display = myRegs.length === 0 ? 'block' : 'none';
+                
+                if (currentUser.role === 'agent') {
+                    const agentsData = await callAPI('getAgents');
+                    if (Array.isArray(agentsData)) {
+                        const agentStats = [];
+                        for (const agent of agentsData) {
+                            const agentRegs = result.filter(r => r.agentId === agent.id && r.status === 'approved');
+                            const agentComm = agentRegs.reduce((sum, r) => sum + (r.commission || 0), 0);
+                            agentStats.push({ id: agent.id, commission: agentComm });
+                        }
+                        agentStats.sort((a, b) => b.commission - a.commission);
+                        const rank = agentStats.findIndex(a => a.id === currentUser.id) + 1;
+                        document.getElementById('agentRank').innerHTML = rank > 0 ? `#${rank}` : '#0';
+                    }
+                }
             }
         }
-        
-        // ==================== REGISTRATION FUNCTIONS ====================
+
         async function loadAllRegistrations() {
             const result = await callAPI('getRegistrations');
-            
             if (Array.isArray(result)) {
-                const tbody = document.querySelector('#registrationsTable tbody');
+                const tbody = document.querySelector('#allRegistrationsTable tbody');
                 tbody.innerHTML = '';
-                
                 result.forEach(reg => {
                     const row = tbody.insertRow();
                     row.insertCell(0).textContent = reg.id;
                     row.insertCell(1).textContent = reg.name;
-                    row.insertCell(2).textContent = reg.idNumber;
-                    row.insertCell(3).textContent = reg.phoneNumber;
-                    row.insertCell(4).textContent = reg.agentName;
-                    row.insertCell(5).innerHTML = `<span class="status-badge status-${reg.status}">${reg.status}</span>`;
-                    
+                    row.insertCell(2).textContent = reg.phoneNumber;
+                    row.insertCell(3).textContent = reg.agentName;
+                    row.insertCell(4).innerHTML = `<span class="status-badge status-${reg.status}">${reg.status}</span>`;
+                    row.insertCell(5).textContent = reg.status === 'approved' ? `KES ${reg.commission || 0}` : '-';
                     const actionCell = row.insertCell(6);
                     if (reg.status === 'pending') {
-                        const approveBtn = document.createElement('button');
-                        approveBtn.textContent = 'Approve';
-                        approveBtn.className = 'approve-btn';
-                        approveBtn.onclick = () => approveRegistration(reg.id);
-                        actionCell.appendChild(approveBtn);
+                        const btn = document.createElement('button');
+                        btn.innerHTML = '<i class="fas fa-check"></i> Approve';
+                        btn.className = 'approve-btn';
+                        btn.onclick = () => approveRegistration(reg.id);
+                        actionCell.appendChild(btn);
                     } else {
-                        actionCell.textContent = reg.status === 'approved' ? `KES ${reg.commission || 0}` : '-';
+                        actionCell.textContent = '-';
                     }
                 });
             }
         }
-        
+
         async function loadAgentRegistrations() {
             if (!currentUser) return;
-            
             const result = await callAPI('getRegistrations');
-            
             if (Array.isArray(result)) {
-                const agentRegs = result.filter(reg => reg.agentId === currentUser.id);
-                const tbody = document.querySelector('#agentRegistrationsTable tbody');
+                const myRegs = result.filter(r => r.agentId === currentUser.id);
+                const tbody = document.getElementById('agentRegistrationsBody');
                 tbody.innerHTML = '';
-                
-                agentRegs.forEach(reg => {
+                if (myRegs.length === 0) {
                     const row = tbody.insertRow();
-                    row.insertCell(0).textContent = reg.id;
-                    row.insertCell(1).textContent = reg.name;
-                    row.insertCell(2).textContent = reg.idNumber;
-                    row.insertCell(3).textContent = reg.phoneNumber;
-                    row.insertCell(4).innerHTML = `<span class="status-badge status-${reg.status}">${reg.status}</span>`;
-                    row.insertCell(5).textContent = reg.status === 'approved' ? `KES ${reg.commission || 0}` : '-';
-                });
+                    row.insertCell(0).colSpan = 7;
+                    row.innerHTML = '<td colspan="7" style="text-align:center;padding:40px;color:#999;">No registrations yet. Start by registering your first customer!</td>';
+                } else {
+                    myRegs.forEach(reg => {
+                        const row = tbody.insertRow();
+                        row.insertCell(0).textContent = reg.id;
+                        row.insertCell(1).textContent = reg.name;
+                        row.insertCell(2).textContent = reg.idNumber;
+                        row.insertCell(3).textContent = reg.phoneNumber;
+                        row.insertCell(4).innerHTML = `<span class="status-badge status-${reg.status}">${reg.status}</span>`;
+                        row.insertCell(5).textContent = reg.status === 'approved' ? `KES ${reg.commission || 0}` : '-';
+                        row.insertCell(6).textContent = reg.timestamp ? new Date(reg.timestamp).toLocaleDateString() : 'N/A';
+                    });
+                }
             }
         }
-        
+
         async function loadAllAgents() {
             const result = await callAPI('getAgents');
+            const registrations = await callAPI('getRegistrations');
+            const regsArray = Array.isArray(registrations) ? registrations : [];
             
             if (Array.isArray(result)) {
                 const tbody = document.querySelector('#agentsTable tbody');
                 tbody.innerHTML = '';
-                
-                result.forEach(agent => {
+                for (const agent of result) {
+                    const agentRegs = regsArray.filter(r => r.agentId === agent.id);
+                    const approvedRegs = agentRegs.filter(r => r.status === 'approved');
+                    const totalCommission = approvedRegs.reduce((sum, r) => sum + (r.commission || 0), 0);
                     const row = tbody.insertRow();
                     row.insertCell(0).textContent = agent.id;
                     row.insertCell(1).textContent = agent.name;
                     row.insertCell(2).textContent = agent.email;
                     row.insertCell(3).textContent = agent.phone;
                     row.insertCell(4).textContent = agent.location;
-                    row.insertCell(5).textContent = agent.status;
-                });
-            }
-        }
-        
-        async function approveRegistration(id) {
-            if (confirm('Approve this registration? Agent will receive KES 50 commission.')) {
-                const result = await callAPI('updateStatus', { id: id, status: 'approved' });
-                
-                if (result.success) {
-                    alert('Registration approved! Email sent to agent.');
-                    loadStats();
-                    loadAllRegistrations();
-                    loadAllAgents();
-                    if (currentUser && currentUser.role === 'agent') {
-                        loadAgentRegistrations();
-                    }
-                } else {
-                    alert('Error: ' + (result.message || 'Unknown error'));
+                    row.insertCell(5).textContent = agentRegs.length;
+                    row.insertCell(6).innerHTML = `<strong>KES ${totalCommission.toLocaleString()}</strong>`;
                 }
             }
         }
-        
-        // ==================== FORM HANDLERS ====================
-        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+
+        async function approveRegistration(id) {
+            if (confirm('Approve this registration? Agent will earn KES 50 commission.')) {
+                const result = await callAPI('updateStatus', { id: id, status: 'approved' });
+                if (result.success) {
+                    showToast('Registration approved! Commission added.', 'success');
+                    loadAllRegistrations();
+                    if (currentUser.role === 'admin') loadAllAgents();
+                    loadAgentDashboard();
+                } else {
+                    showToast('Error: ' + (result.message || 'Unknown error'), 'error');
+                }
+            }
+        }
+
+        // Login Handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+            
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
             
             const result = await callAPI('login', { email, password });
             
             if (result.success) {
                 currentUser = result.agent;
                 document.getElementById('sidebarUserName').textContent = currentUser.name;
-                document.getElementById('sidebarUserRole').textContent = currentUser.role.toUpperCase();
+                document.getElementById('welcomeName').textContent = currentUser.name.split(' ')[0];
+                document.getElementById('sidebarUserRole').innerHTML = `<i class="fas fa-${currentUser.role === 'admin' ? 'crown' : 'user-check'}"></i> ${currentUser.role.toUpperCase()}`;
                 
                 if (currentUser.role === 'admin') {
-                    document.getElementById('adminNavItems').style.display = 'block';
-                    document.getElementById('agentNavItems').style.display = 'none';
+                    document.getElementById('adminMenu').style.display = 'block';
+                    document.getElementById('agentMenu').style.display = 'none';
                     document.getElementById('quickAllRegBtn').style.display = 'block';
                     document.getElementById('quickMyRegBtn').style.display = 'none';
                     loadAllRegistrations();
                     loadAllAgents();
                 } else {
-                    document.getElementById('adminNavItems').style.display = 'none';
-                    document.getElementById('agentNavItems').style.display = 'block';
+                    document.getElementById('adminMenu').style.display = 'none';
+                    document.getElementById('agentMenu').style.display = 'block';
                     document.getElementById('quickAllRegBtn').style.display = 'none';
                     document.getElementById('quickMyRegBtn').style.display = 'block';
-                    loadAgentRegistrations();
                 }
                 
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
-                loadStats();
-                checkPromotions();
+                await loadAgentDashboard();
+                await loadAgentRegistrations();
                 
                 document.getElementById('connectionStatus').className = 'connection-status connection-online';
-                document.getElementById('connectionStatus').textContent = '🟢 Connected to Google Sheets';
+                document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-check-circle"></i> System Ready';
+                showToast(`Welcome back, ${currentUser.name}!`, 'success');
             } else {
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
                 const errorDiv = document.getElementById('loginError');
-                errorDiv.style.display = 'block';
-                errorDiv.textContent = 'Login failed: ' + (result.message || 'Invalid credentials');
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 3000);
+                errorDiv.style.display = 'flex';
+                errorDiv.querySelector('span').textContent = result.message || 'Invalid credentials';
+                setTimeout(() => errorDiv.style.display = 'none', 3000);
             }
         });
-        
-        document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
+
+        // Registration Form
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            if (!currentUser) {
-                alert('Please login first');
-                return;
-            }
+            if (!currentUser) return;
             
             const params = {
                 name: document.getElementById('regName').value,
@@ -868,34 +1439,20 @@
             };
             
             const result = await callAPI('registerMpesa', params);
-            
             if (result.success) {
-                const successDiv = document.getElementById('regSuccess');
-                successDiv.style.display = 'block';
-                successDiv.textContent = 'Registration submitted successfully!';
-                setTimeout(() => {
-                    successDiv.style.display = 'none';
-                }, 3000);
+                showToast('Registration submitted! Pending approval.', 'success');
                 document.getElementById('registrationForm').reset();
-                loadStats();
-                if (currentUser.role === 'agent') {
-                    loadAgentRegistrations();
-                } else {
-                    loadAllRegistrations();
-                }
+                await loadAgentDashboard();
+                await loadAgentRegistrations();
+                if (currentUser.role === 'admin') await loadAllRegistrations();
             } else {
-                const errorDiv = document.getElementById('regError');
-                errorDiv.style.display = 'block';
-                errorDiv.textContent = 'Error: ' + (result.message || 'Unknown error');
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 3000);
+                showToast('Error: ' + (result.message || 'Unknown error'), 'error');
             }
         });
-        
+
+        // Create Agent Form
         document.getElementById('createAgentForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const params = {
                 name: document.getElementById('agentName').value,
                 email: document.getElementById('agentEmail').value,
@@ -903,73 +1460,35 @@
                 idNumber: document.getElementById('agentIdNumber').value,
                 location: document.getElementById('agentLocation').value
             };
-            
             const result = await callAPI('createAgent', params);
-            
             if (result.success) {
-                const successDiv = document.getElementById('agentSuccess');
-                successDiv.style.display = 'block';
-                successDiv.innerHTML = `Agent created successfully!<br>Password: ${result.password}<br>Email sent to agent.`;
-                setTimeout(() => {
-                    successDiv.style.display = 'none';
-                }, 5000);
+                showToast(`Agent created! Password: ${result.password}`, 'success');
                 document.getElementById('createAgentForm').reset();
                 loadAllAgents();
             } else {
-                const errorDiv = document.getElementById('agentError');
-                errorDiv.style.display = 'block';
-                errorDiv.textContent = 'Error: ' + (result.message || 'Unknown error');
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 3000);
+                showToast('Error: ' + (result.message || 'Unknown error'), 'error');
             }
         });
-        
-        // ==================== PROMOTIONS ====================
-        async function checkPromotions() {
-            if (sessionStorage.getItem('promoShown')) {
-                return;
-            }
-            
-            const promotions = await callAPI('getPromotions');
-            
-            if (Array.isArray(promotions) && promotions.length > 0) {
-                const promo = promotions[0];
-                document.getElementById('promoTitle').textContent = promo.title;
-                document.getElementById('promoMessage').textContent = promo.message;
-                document.getElementById('promoModal').style.display = 'flex';
-                sessionStorage.setItem('promoShown', 'true');
-            }
-        }
-        
-        function closePromoModal() {
-            document.getElementById('promoModal').style.display = 'none';
-        }
-        
-        // ==================== AUTO REFRESH ====================
-        let refreshInterval;
-        function startAutoRefresh() {
-            if (refreshInterval) clearInterval(refreshInterval);
-            refreshInterval = setInterval(() => {
-                if (currentUser) {
-                    loadStats();
-                }
-            }, 30000);
-        }
-        
+
         function logout() {
-            if (refreshInterval) clearInterval(refreshInterval);
             currentUser = null;
-            sessionStorage.removeItem('promoShown');
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('loginForm')?.reset();
+            document.getElementById('loginForm').reset();
             document.getElementById('connectionStatus').className = 'connection-status connection-offline';
-            document.getElementById('connectionStatus').textContent = '🔴 Disconnected';
+            document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Disconnected';
+            showToast('Logged out successfully', 'success');
         }
-        
-        // ==================== INITIALIZATION ====================
-        console.log('System initialized. Script URL:', SCRIPT_URL);
+
+        // Auto refresh
+        setInterval(() => {
+            if (currentUser) {
+                loadAgentDashboard();
+                if (document.getElementById('allRegistrationsPage')?.classList.contains('active')) loadAllRegistrations();
+                if (document.getElementById('allAgentsPage')?.classList.contains('active')) loadAllAgents();
+                if (document.getElementById('myRegistrationsPage')?.classList.contains('active')) loadAgentRegistrations();
+            }
+        }, 30000);
     </script>
 </body>
 </html>
